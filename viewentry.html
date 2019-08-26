@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>New Entry</title>
+    <script src="/scripts/jquery.js"></script>
+</head>    
+<body>
+    
+    <h1>Peoples: </h1>
+    <div id="list"></div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <button id="new_entry">Add New Entry</button>
+    <br>
+    <div id="form" style="display: none">
+
+        <h5>Date: </h5><input type="text" id="form_date" readonly>
+        <br>
+        <h5>Flight Time: </h5><input type="time" id="time" value="13:10">
+        <br><br>
+        <button id="add_entry">Add!</button>
+
+    </div>
+
+    <br><br><br>
+    <div id="out"></div>
+
+
+
+    <script>
+
+        const urlParams =new URLSearchParams(window.location.search);
+        const from = urlParams.get('from');
+        const date = urlParams.get('date');
+
+        $("#form_date").val(date);
+
+        var elem = $("#list");
+
+        $(document).ready(function() {
+
+            $.ajax({
+                method: "GET",
+                url: `/events?from=${from}&date=${date}`,
+                success: (data)=> {
+
+                    var rows = data;
+                    if(rows.length == 0){
+                        console.log("here");
+                        $("#list").text("No Entries On this Date");
+                    }else{
+
+                        for (entry of rows){
+
+                            var element = document.createElement("A");
+                            element.href= entry.fblink;
+                            element.innerHTML= entry.name + "  -  " + entry.time;
+                            var br = document.createElement("BR");
+
+                            $("#list").append(element);
+                            $("#list").append(br);
+                            $("#list").append(br);
+
+                        }
+                    }
+                }
+            });
+
+        });
+
+
+        $("#new_entry").on("click", function() {
+
+            $(this).css( "display", "none");
+            $("#form").css( "display", "block");
+            
+            console.log("here");
+
+        })
+
+        var fbData = {
+            name: "akshat",
+            link: "https://www.google.com"
+        };
+
+        $("#add_entry").on("click", function() {
+
+            $.post({
+                url: "/addentry",
+                data: {
+
+                    name: fbData.name,
+                    date: date,
+                    time: $("#time").val(),
+                    fblink: fbData.link,
+                    from: from
+
+                },
+                success: (response) => {
+                    if(response == "success!")
+                        window.location.href = "/home?from="+from;
+                    else
+                        $("#out").text("Sorry! Internal Server Error!! ;-(");
+                }
+
+            });
+
+        })
+
+
+
+    
+    </script>
+
+    
+    
+
+
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+      <title>Home</title>
+    <meta charset='utf-8' />
+
+    <link href="/scripts/none?loc=core/main.css" rel='stylesheet' />
+    <link href="/scripts/none?loc=daygrid/main.css" rel='stylesheet' />
+
+    <style>
+
+    .fc-day, .fc-day-top, .td {
+      cursor: pointer;
+    }
+
+
+    </style>
+
+    <script src="/scripts/none?loc=core/main.js"></script>
+    <script src="/scripts/none?loc=daygrid/main.js"></script>
+    <script src="/scripts/jquery.js"></script>
+
+    
+    
+    <script>
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const from = urlParams.get('from');
+      console.log(from)
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          plugins: [ 'dayGrid' ],
+          height: 800,
+          events: "/events?from=" + from,
+          color: "yellow",
+          textColor: 'black',
+          eventClick: function(info){
+
+            console.log(info.event);
+            // window.open(info.event.url, '__blank');
+            window.location.href = (info.event.url);
+
+          }
+
+        });
+
+        calendar.render();
+      });
+
+      
+      $(document).on("click", ".fc-day, .fc-day-top, .td", function() {
+
+        var date = $(this).attr("data-date");
+        console.log( date );
+
+        window.location.href = "viewentry?date="+date+"&from="+from;
+        // $.ajax({
+        //   method: "GET",
+        //   url: "/addentry"+date,
+        //   data: { 'date': date},
+        //   success: (resp) => {
+            
+        //     console.log(resp);
+
+        //   }
+
+        // });
+
+      });
+
+
+    </script>
+  </head>
+  <body>
+
+    <div id='calendar'></div>
+
+  </body>
+</html>

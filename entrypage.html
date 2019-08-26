@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Destination</title>
+    <script src="/scripts/jquery.js"></script>
+</head>
+<body>
+
+    <h3>From: </h3>
+    <select id="from">
+        <option value="kgp" selected>KGP</option>
+        <option value="ccu">CCU</option>
+    </select>
+
+    <h3>To: </h3>
+    <span id="dest">CCU</span>
+
+    <br><br><br><br>
+
+    <button id="find">Submit</button>
+
+    <script>
+        
+        $(document).on('change', "#from", function() {
+
+            var value = $(this).val();
+            console.log( value );
+
+            if(value == 'kgp')
+                $("#dest").text("CCU");
+            else
+                $("#dest").text("KGP");
+
+        });
+
+        $("#find").on("click", function() {
+
+            window.location.href = "/home?from=" + $("#from").val();
+
+        })
+    
+    
+    </script>
+
+</body>
+</html>
