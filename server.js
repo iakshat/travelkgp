@@ -1,9 +1,19 @@
 const express = require("express");
 const httpslocalhost = require("https-localhost");
 const pug = require("pug");
+const https = require("https");
+const fs = require("fs");
 const mysql = require("mysql");
 const bodyParser = require("body-parser");
 require("dotenv").config();
+
+
+var options = {
+    key: fs.readFileSync( './localhost.key' ),
+    cert: fs.readFileSync( './localhost.cert' ),
+    requestCert: false,
+    rejectUnauthorized: false
+};
 
 var connection = mysql.createConnection({
 
@@ -121,7 +131,7 @@ app.get("/events", (req, res) => {
                 throw err;
 
             res.send( rows );
-            
+
         });
 
     }else{
@@ -131,7 +141,7 @@ app.get("/events", (req, res) => {
             if(err)
                 throw err;
 
-            var to_send = []; 
+            var to_send = [];
 
             for( row of rows ){
 
