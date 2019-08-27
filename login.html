@@ -10,6 +10,12 @@
 
 <body>
 
+
+  <fb:login-button
+  scope="public_profile,email"
+  onlogin="checkLoginState();">
+  </fb:login-button>
+
   <script>
 
 
@@ -42,7 +48,7 @@
 
     FB.getLoginStatus(function (response) {
       console.log(response);
-      // statusChangeCallback(response);
+      statusChangeCallback(response);
     });
 
 
