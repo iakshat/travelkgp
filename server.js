@@ -28,7 +28,8 @@ connection.connect( (err) => {
 
     if(err){
         console.log("Error in connecting to database ;-(");
-        throw err;}
+        // throw err;
+    }
     else
         console.log("Connected to DB :-)");
 
