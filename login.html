@@ -10,12 +10,11 @@
 
 <body>
 
-
-  <fb:login-button
-  scope="public_profile,email"
-  onlogin="checkLoginState();">
+  <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
   </fb:login-button>
 
+
+  <script src="/scripts/jquery.js"></script>
   <script>
 
 
@@ -29,9 +28,59 @@
 
       FB.AppEvents.logPageView();
 
+      $( document ).on("request", function( request ) {
+        console.log(request.url);
+      });
+
+
+
+
       FB.getLoginStatus(function (response) {
-        statusChangeCallback(response);
+
         console.log(response);
+        // statusChangeCallback(response);
+
+        if (response.status == "connected") {
+
+            var resp, res;
+
+            // window.location.href = "/entrypage";
+
+            FB.api('/me', function (resp) {
+              console.log((resp));
+            });
+
+            FB.api('/me?fields=link', function (respon) {
+              console.log("link to profile: "(respon));
+            });
+
+            FB.api(
+                `/${response.authResponse.userID}/picture?redirect=false`,
+                'GET',
+                {},
+                function (res) {
+                  console.log(res);
+                }
+              );
+
+
+            var dataToSend = {
+              username: resp.name,
+              id: resp.id,
+
+
+            }
+
+            $.ajax({
+
+              method: "POST",
+              url: "/oauth/facebook",
+              data: dataToSend,
+
+
+            });
+
+        }
       });
 
     };
@@ -43,16 +92,6 @@
       js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-
-
-
-    FB.getLoginStatus(function (response) {
-      console.log(response);
-      statusChangeCallback(response);
-    });
-
-
-
 
 
 
