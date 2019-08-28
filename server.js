@@ -215,6 +215,6 @@ app.get("/events", (req, res) => {
 })
 
 //RUN SERVER
-app.listen(2000, () => {
+app.listen(80, () => {
     console.log("server running...");
 })
