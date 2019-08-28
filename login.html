@@ -50,10 +50,6 @@
               console.log((resp));
             });
 
-            FB.api('/me?fields=link', function (respon) {
-              console.log("link to profile: "(respon));
-            });
-
             FB.api(
                 `/${response.authResponse.userID}/picture?redirect=false`,
                 'GET',
@@ -63,19 +59,28 @@
                 }
               );
 
+            if(resp.link == undefined) {
+              resp.link = `https://www.facebook.com/search/top/?q=${resp.name}&epa=SEARCH_BOX`;
+            }
+
 
             var dataToSend = {
-              username: resp.name,
+              name: resp.name,
               id: resp.id,
-
-
-            }
+              link : resp.link,
+              profilepic: res.data.url,
+              accessToken: response.authResponse.accessToken
+            };
 
             $.ajax({
 
               method: "POST",
               url: "/oauth/facebook",
               data: dataToSend,
+              success: (dataR)=> {
+                if(dataR = "success!")
+                  window.location.href = "/entrypage";
+              }
 
 
             });
